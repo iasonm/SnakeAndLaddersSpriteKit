@@ -3,6 +3,23 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "GameScene.spriteButtonPressed(SKSpriteNode) -&gt; ():GameScene.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "size">
+            </PersistentString>
+            <PersistentString
+               value = "diceLabel.frame">
+            </PersistentString>
+            <PersistentString
+               value = "diceLabel.fillColor">
+            </PersistentString>
+            <PersistentString
+               value = "diceLabel.label.frame">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "GameScene.update(Double) -&gt; ():GameScene.swift">
          <PersistentStrings>
             <PersistentString

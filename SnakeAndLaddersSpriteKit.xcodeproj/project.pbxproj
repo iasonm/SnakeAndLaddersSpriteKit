@@ -14,10 +14,8 @@
 		FA071C5C1C1FE8FE00DD5D5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA071C5B1C1FE8FE00DD5D5E /* Assets.xcassets */; };
 		FA071C5F1C1FE8FE00DD5D5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA071C5D1C1FE8FE00DD5D5E /* LaunchScreen.storyboard */; };
 		FA071CB61C22DB3800DD5D5E /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA071CB51C22DB3800DD5D5E /* Board.swift */; };
-		FA071CBA1C23DF6F00DD5D5E /* pew-pew-lei.caf in Resources */ = {isa = PBXBuildFile; fileRef = FA071CB91C23DF6F00DD5D5E /* pew-pew-lei.caf */; };
 		FA071CBC1C23DFC300DD5D5E /* click.aif in Resources */ = {isa = PBXBuildFile; fileRef = FA071CBB1C23DFC300DD5D5E /* click.aif */; };
-		FA071CBD1C23E8C000DD5D5E /* background-music-aac.caf in Resources */ = {isa = PBXBuildFile; fileRef = FA071CB81C23DEB300DD5D5E /* background-music-aac.caf */; };
-		FA071CBF1C24199C00DD5D5E /* SnakesAndLaddersTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA071CBE1C24199C00DD5D5E /* SnakesAndLaddersTrack.swift */; };
+		FA4A0E3B1C2AB95D00CDE39A /* DiceLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4A0E3A1C2AB95D00CDE39A /* DiceLabel.swift */; };
 		FAF051E31C265B6600901B7D /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF051E21C265B6600901B7D /* Game.swift */; };
 		FAF051E51C27CF1500901B7D /* PlayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF051E41C27CF1500901B7D /* PlayButton.swift */; };
 /* End PBXBuildFile section */
@@ -32,10 +30,8 @@
 		FA071C5E1C1FE8FE00DD5D5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA071C601C1FE8FE00DD5D5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA071CB51C22DB3800DD5D5E /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
-		FA071CB81C23DEB300DD5D5E /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
-		FA071CB91C23DF6F00DD5D5E /* pew-pew-lei.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pew-pew-lei.caf"; sourceTree = "<group>"; };
 		FA071CBB1C23DFC300DD5D5E /* click.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = click.aif; sourceTree = "<group>"; };
-		FA071CBE1C24199C00DD5D5E /* SnakesAndLaddersTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnakesAndLaddersTrack.swift; sourceTree = "<group>"; };
+		FA4A0E3A1C2AB95D00CDE39A /* DiceLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiceLabel.swift; sourceTree = "<group>"; };
 		FAF051E21C265B6600901B7D /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		FAF051E41C27CF1500901B7D /* PlayButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,19 +66,17 @@
 		FA071C4F1C1FE8FE00DD5D5E /* SnakeAndLaddersSpriteKit */ = {
 			isa = PBXGroup;
 			children = (
-				FAF051E41C27CF1500901B7D /* PlayButton.swift */,
+				FA071C561C1FE8FE00DD5D5E /* GameViewController.swift */,
+				FA071C541C1FE8FE00DD5D5E /* GameScene.swift */,
 				FAF051E21C265B6600901B7D /* Game.swift */,
 				FA071CB51C22DB3800DD5D5E /* Board.swift */,
-				FA071CBE1C24199C00DD5D5E /* SnakesAndLaddersTrack.swift */,
-				FA071C501C1FE8FE00DD5D5E /* AppDelegate.swift */,
-				FA071C541C1FE8FE00DD5D5E /* GameScene.swift */,
-				FA071C561C1FE8FE00DD5D5E /* GameViewController.swift */,
+				FAF051E41C27CF1500901B7D /* PlayButton.swift */,
+				FA4A0E3A1C2AB95D00CDE39A /* DiceLabel.swift */,
 				FA071C581C1FE8FE00DD5D5E /* Main.storyboard */,
 				FA071C5B1C1FE8FE00DD5D5E /* Assets.xcassets */,
 				FA071C5D1C1FE8FE00DD5D5E /* LaunchScreen.storyboard */,
 				FA071C601C1FE8FE00DD5D5E /* Info.plist */,
-				FA071CB91C23DF6F00DD5D5E /* pew-pew-lei.caf */,
-				FA071CB81C23DEB300DD5D5E /* background-music-aac.caf */,
+				FA071C501C1FE8FE00DD5D5E /* AppDelegate.swift */,
 				FA071CBB1C23DFC300DD5D5E /* click.aif */,
 			);
 			path = SnakeAndLaddersSpriteKit;
@@ -148,10 +142,8 @@
 			files = (
 				FA071C5F1C1FE8FE00DD5D5E /* LaunchScreen.storyboard in Resources */,
 				FA071C5C1C1FE8FE00DD5D5E /* Assets.xcassets in Resources */,
-				FA071CBD1C23E8C000DD5D5E /* background-music-aac.caf in Resources */,
 				FA071C5A1C1FE8FE00DD5D5E /* Main.storyboard in Resources */,
 				FA071CBC1C23DFC300DD5D5E /* click.aif in Resources */,
-				FA071CBA1C23DF6F00DD5D5E /* pew-pew-lei.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,8 +159,8 @@
 				FA071C571C1FE8FE00DD5D5E /* GameViewController.swift in Sources */,
 				FAF051E31C265B6600901B7D /* Game.swift in Sources */,
 				FA071CB61C22DB3800DD5D5E /* Board.swift in Sources */,
-				FA071CBF1C24199C00DD5D5E /* SnakesAndLaddersTrack.swift in Sources */,
 				FA071C511C1FE8FE00DD5D5E /* AppDelegate.swift in Sources */,
+				FA4A0E3B1C2AB95D00CDE39A /* DiceLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

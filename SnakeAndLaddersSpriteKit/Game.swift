@@ -5,13 +5,12 @@ typealias Jump = (position:Int, jump:Int)
 
 struct Move {
     let pawn:Int
+    let nextPawn:Int
     let startPosition:Int
-    var endPosition:Int
+    let endPosition:Int
     let diceRoll:Int
     let won:Bool
 }
-
-
 
 struct Track {
     
@@ -42,7 +41,7 @@ struct SnakesAndLaddersGame {
     var won = false
     var activePawn = -1
     let diceGenerator = GKRandomDistribution.d6()
-    var lastRoll = 0
+    var diceRoll = 0
     let track = Track(
         length: 27,
         jumps: [
@@ -58,18 +57,17 @@ struct SnakesAndLaddersGame {
     )
     
     var nextPawn:Int {
-        return lastRoll == 6 ? activePawn : (activePawn + 1) % 4
+        return diceRoll == 6 ? activePawn : (activePawn + 1) % 4
     }
     
-    mutating func nextMove()->Move? {
-        guard !won else { return nil }        
+    mutating func nextMove()->Move {
         activePawn = nextPawn
-        lastRoll = diceGenerator.nextInt()
+        diceRoll = diceGenerator.nextInt()
         let startPosition = pawnPositions[activePawn]
-        let endPosition = track.generateMove(startPosition, diceRoll: lastRoll)
+        let endPosition = track.generateMove(startPosition, diceRoll: diceRoll)
         won = endPosition == track.length - 1
         pawnPositions[activePawn] = endPosition
-        return Move(pawn: activePawn, startPosition: startPosition, endPosition: endPosition, diceRoll: lastRoll, won: won)
+        return Move(pawn: activePawn, nextPawn: nextPawn, startPosition: startPosition, endPosition: endPosition, diceRoll: diceRoll, won: won)
     }
     
 }

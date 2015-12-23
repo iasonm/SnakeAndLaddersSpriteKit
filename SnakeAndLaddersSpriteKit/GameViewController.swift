@@ -16,10 +16,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let skView = self.view as! SKView
-//        skView.showsFPS = true
-//        skView.showsNodeCount = true
         skView.ignoresSiblingOrder = false
-//        skView.showsPhysics = true
         scene = GameScene(size: skView.bounds.size)
         scene.scaleMode = .AspectFill
         scene.backgroundColor = UIColor(red: 0, green: 0.0078, blue: 0.5373, alpha: 1.0)
@@ -36,11 +33,6 @@ class GameViewController: UIViewController {
         } else {
             return .All
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 
     override func prefersStatusBarHidden() -> Bool {

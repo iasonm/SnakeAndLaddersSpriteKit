@@ -2,6 +2,19 @@ import SpriteKit
 
 struct Board {
     
+    enum State {
+        case Stopped
+        case Moving
+        case Won
+        
+        func sendTo(observer:BoardObserver)->SKAction {
+            return SKAction.runBlock{
+                observer.boardState(self)
+            }
+        }
+        
+    }
+    
     typealias Pawn = SKSpriteNode
     typealias Square = (column: Int, row: Int)
     
@@ -44,20 +57,27 @@ struct Board {
         imageWidth = width
         self.boardObserver = boardObserver
         boardImage.size = CGSize(width: width, height: width + 2 * squareGrid)
-        for idx in 0 ..< min( max(numberOfPawns, 1), 4) {
-            addPawn(idx)
+        for index in 0 ..< min( max(numberOfPawns, 1), 4) {
+            addPawn(index)
         }
     }
     
     mutating func addPawn(number:Int) {
-        let sprite = SKSpriteNode(imageNamed: pawnNames[number])
-        sprite.size = CGSize(width: pawnGrid, height: pawnGrid)
-        sprite.anchorPoint = pawnAnchorPoints[number]
-        sprite.position = boardStartPosition
-        sprite.name = pawnNames[number]
-        let pawn = sprite
+        let pawn = SKSpriteNode(imageNamed: pawnNames[number])
+        pawn.size = CGSize(width: pawnGrid, height: pawnGrid)
+        pawn.anchorPoint = pawnAnchorPoints[number]
+        pawn.position = boardStartPosition
+        pawn.name = pawnNames[number]
         pawns.append(pawn)
         boardImage.addChild(pawn)
+    }
+    
+    func resetPawns() {
+        for (index,pawn) in pawns.enumerate() {
+            pawn.size = CGSize(width: pawnGrid, height: pawnGrid)
+            pawn.anchorPoint = pawnAnchorPoints[index]
+            pawn.runAction(SKAction.moveTo(boardStartPosition, duration: 1))
+        }
     }
     
     mutating func executeMove(move:Move) {
@@ -66,31 +86,29 @@ struct Board {
         let startPosition = move.startPosition
         let stepDestination = move.startPosition + move.diceRoll
         let finalDestination = move.endPosition
-        let pawnMoving = SKAction.runBlock{
-            self.boardObserver.pawnBeganMoving(pawn)
-        }
-        let pawnStopped = SKAction.runBlock{
-            self.boardObserver.pawnStoppedMoving(pawn)
-        }
-        let pawnWon = SKAction.runBlock{
-            self.boardObserver.gameWon(pawn)
-        }
-        let stepSequence = stepPawnFrom(startPosition, to: stepDestination)
-        let jumpSequence = jumpPawnFrom(stepDestination, to: finalDestination)
         var sequenceArray:[SKAction] = []
         if move.won {
             pawn.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            pawn.zPosition = 0
-            sequenceArray = [pawnMoving,stepSequence,wonSequence(),pawnWon]
+            pawn.zPosition = 10000
+            sequenceArray = [
+                State.Moving.sendTo(boardObserver),
+                stepPawnFrom(startPosition, to: stepDestination),
+                State.Won.sendTo(boardObserver),
+                wonSequence()
+            ]
         } else {
-            sequenceArray = [pawnMoving,stepSequence,jumpSequence,pawnStopped]
+            sequenceArray = [
+                State.Moving.sendTo(boardObserver),
+                stepPawnFrom(startPosition, to: stepDestination),
+                jumpPawnFrom(stepDestination, to: finalDestination),
+                State.Stopped.sendTo(boardObserver)
+            ]
         }
         pawn.runAction(SKAction.sequence(sequenceArray))
     }
     
     func stepPawnFrom(startingPosition:Int, to endingPosition:Int)->SKAction {
         var sequenceArray:[SKAction] = []
-//        let steps = endingPosition - startingPosition
         let wait = SKAction.waitForDuration(0.1)
         for step in startingPosition + 1 ... endingPosition {
             let point = positionToPoint(step)
@@ -116,8 +134,7 @@ struct Board {
     func wonSequence()->SKAction {
         let center = SKAction.moveTo(CGPointZero, duration: 0.5)
         let grow = SKAction.scaleBy(4.0, duration: 0.5)
-        return SKAction.sequence([center,grow])
-        
+        return SKAction.sequence([center,grow])        
     }
     
     func positionToPoint(position:Int)->CGPoint {

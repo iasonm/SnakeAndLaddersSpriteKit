@@ -2,24 +2,21 @@ import SpriteKit
 import AVFoundation
 
 protocol BoardObserver {
-    func pawnBeganMoving(pawn:SKSpriteNode)
-    func pawnStoppedMoving(pawn:SKSpriteNode)
-    func gameWon(pawn:SKSpriteNode)
+    func boardState(state:Board.State)
 }
 
-protocol SpriteButtonObserver {
-    func spriteButtonPressed(button:SKSpriteNode)
+protocol PlayButtonObserver {
+    func playButtonPressed(button:SKShapeNode)
 }
 
-class GameScene: SKScene, BoardObserver, SpriteButtonObserver {
+class GameScene: SKScene, BoardObserver, PlayButtonObserver {
     
     var board:Board!
-    var playButton:SpriteButton!
-    var diceLabel:SpriteButton!
+    var playButton:PlayButton!
+    var diceLabel:DiceLabel!
     var game:SnakesAndLaddersGame!
-    var pawnMoving = false
     var click:SKAudioNode!
-    var currentMove = Move(pawn:0, startPosition: 0, endPosition:0, diceRoll:0, won:false)
+    var currentMove = Move(pawn:0, nextPawn:0, startPosition: 0, endPosition:0, diceRoll:0, won:false)
     
     var squareSide:CGFloat {
         return size.width / 5
@@ -57,19 +54,10 @@ class GameScene: SKScene, BoardObserver, SpriteButtonObserver {
     
     func startGame() {
         game = SnakesAndLaddersGame()
-        currentMove = Move(pawn:0, startPosition: 0, endPosition:0, diceRoll:0, won:false)
-        if board.boardImage.inParentHierarchy(self) {
-            board.boardImage.removeFromParent()
-        }
-        if playButton.inParentHierarchy(self) {
-            playButton.removeFromParent()
-        }
-        if diceLabel.inParentHierarchy(self) {
-            diceLabel.removeFromParent()
-        }
-        addBoard()
-        addPlayButton()
-        addDiceLabel()
+        currentMove = Move(pawn:0, nextPawn:0, startPosition: 0, endPosition:0, diceRoll:0, won:false)
+        board.resetPawns()
+        playButton.state = .RollDice(pawn:0)
+        diceLabel.setDiceNumber(0)
     }
     
     func addBoard() {
@@ -81,62 +69,43 @@ class GameScene: SKScene, BoardObserver, SpriteButtonObserver {
     func addPlayButton() {
         let playButtonSize = CGSize(width: gridUnit * 7, height: gridUnit * 2)
         let playButtonPosition = CGPoint(x: board.boardImage.frame.maxX - playButtonSize.width/2, y: board.boardImage.frame.minY)
-        playButton = SpriteButton(texture: nil, color: UIColor.orangeColor(), size: playButtonSize)
+        playButton = PlayButton(rectOfSize: playButtonSize)
         playButton.position = playButtonPosition
         playButton.observer = self
         addChild(playButton)
     }
     
     func addDiceLabel() {
-        let backgroundSize = CGSize(width: (squareSide * 2) + 10, height: squareSide + 10)
-        let backgroundShape = SKShapeNode(rectOfSize: backgroundSize)
-        backgroundShape.fillColor = UIColor.cyanColor()
-        backgroundShape.position = CGPoint(x: size.width/2, y: board.boardImage.frame.maxY)
-        let filter  = CIFilter(name: "CIGaussianBlur")!
-        filter.setValue(20.0, forKey: "inputRadius")
-        let effect = SKEffectNode()
-        effect.filter = filter
-        effect.addChild(backgroundShape)
-        diceLabel = SpriteButton(texture: nil, color: UIColor.cyanColor(), size: CGSize(width: squareSide * 2, height: squareSide))
-        diceLabel.label.text = "Diceroll: 0"
-        diceLabel.label.fontSize = 20
-        diceLabel.label.fontColor = UIColor.purpleColor()
+        diceLabel = DiceLabel(rectOfSize: CGSize(width: squareSide * 2, height: squareSide))
         diceLabel.position = CGPoint(x: size.width/2, y: board.boardImage.frame.maxY)
-        addChild(effect)
         addChild(diceLabel)
     }
     
-    func spriteButtonPressed(button: SKSpriteNode) {
-        guard !pawnMoving else { return }
-        guard !currentMove.won else {
+    func playButtonPressed(button: SKShapeNode) {
+        if currentMove.won {
             startGame()
-            return
+        } else {
+            nextMove()
         }
-        guard let move = game.nextMove() else { return }
+    }
+    
+    func nextMove() {
+        let move = game.nextMove()
         currentMove = move
-        diceLabel.label.text = "Diceroll: \(move.diceRoll)"
+        diceLabel.setDiceNumber(move.diceRoll)
         board.activePawnIndex = move.pawn
         board.executeMove(move)
     }
     
-    func pawnBeganMoving(pawn: SKSpriteNode) {
-        pawnMoving = true
-        playButton.color = UIColor.purpleColor()
-        playButton.label.text = "Player \(currentMove.pawn + 1) moving!"
-    }
-    
-    func pawnStoppedMoving(pawn: SKSpriteNode) {
-        pawnMoving = false
-        playButton.color = UIColor.orangeColor()
-        playButton.label.text = "Player \(game.nextPawn + 1) roll!"
-    }
-    
-    func gameWon(pawn: SKSpriteNode) {
-        pawnMoving = false
-        diceLabel.color = UIColor.greenColor()
-        diceLabel.label.text = "Player \(currentMove.pawn + 1) won!"
-        playButton.color = UIColor.greenColor()
-        playButton.label.text = "New Game?"
+    func boardState(state: Board.State) {
+        switch state {
+        case .Stopped:
+            playButton.state = .RollDice(pawn: currentMove.nextPawn)
+        case .Moving:
+            playButton.state = .PawnMoving(pawn: currentMove.pawn)
+        case .Won:
+            playButton.state = .GameWon
+        }
     }
     
 }
